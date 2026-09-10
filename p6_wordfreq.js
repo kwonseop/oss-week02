@@ -13,7 +13,7 @@
 // then import all three here. Your own file: "./" and ".js" are both required.
 
 import fs from "node:fs";
-// TODO: import { tokenize, countWords, topN } from ...
+import { tokenize, countWords, topN } from "./utils.js";
 
 const path = process.argv[2];
 const text = fs.readFileSync(path, "utf8");
@@ -26,3 +26,8 @@ const counts = countWords(words);
 
 // TODO: print the top 5 as "word count", one per line
 //       topN(counts, 5) returns [["code", 9], ["the", 7], ...]
+console.log(`${words.length} words, ${Object.keys(counts).length} distinct`);
+
+topN(counts, 5).forEach(([word, count]) => {
+  console.log(`${word} ${count}`);
+});
