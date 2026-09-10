@@ -26,14 +26,18 @@
 // So: collect lines in the "line" handler, do the work in the "close" handler.
 
 import readline from "node:readline";
+import Inko from "inko";
 
-// TODO: import Inko from "inko" and create an instance
+const inko = new Inko();
 
 const reverse = process.argv.includes("--reverse");
 const lines = [];
 
 // stdin = what you type, stdout = the screen. rl reads stdin one line at a time.
-const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout,
+});
 
 if (reverse) console.log("Type lines in Korean (ko -> en).");
 else console.log("Type lines in English keys (en -> ko).");
@@ -53,4 +57,16 @@ rl.on("close", () => {
   //   1. 오픈 소스
   //   2. 깃허브 노드
   // Use ko2en instead of en2ko when reverse is true.
+  lines
+    .filter((line) => line.trim() !== "")
+    .map((line) => {
+      if (reverse) {
+        return inko.ko2en(line);
+      } else {
+        return inko.en2ko(line);
+      }
+    })
+    .forEach((line, index) => {
+      console.log(`${index + 1}. ${line}`);
+    });
 });
